@@ -53,17 +53,23 @@ func NewACSKClusterContext(csClient *cs.Client,
 type ACSKClusterCreateContext struct {
 	ACSKClusterContext
 	acsk.AlibabaClusterCreateParams
+	NodePools []*model.ACSKNodePoolModel
 }
 
 // NewACSKClusterCreationContext creates a new ACSKClusterCreateContext
-func NewACSKClusterCreationContext(csClient *cs.Client,
-	ecsClient *ecs.Client, clusterCreateParams acsk.AlibabaClusterCreateParams) *ACSKClusterCreateContext {
+func NewACSKClusterCreationContext(
+	csClient *cs.Client,
+	ecsClient *ecs.Client,
+	clusterCreateParams acsk.AlibabaClusterCreateParams,
+	nodePools []*model.ACSKNodePoolModel,
+) *ACSKClusterCreateContext {
 	return &ACSKClusterCreateContext{
 		ACSKClusterContext: ACSKClusterContext{
 			CSClient:  csClient,
 			ECSClient: ecsClient,
 		},
 		AlibabaClusterCreateParams: clusterCreateParams,
+		NodePools:                  nodePools,
 	}
 }
 

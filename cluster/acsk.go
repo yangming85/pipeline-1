@@ -225,7 +225,9 @@ func (c *ACSKCluster) CreateCluster() error {
 			NumOfNodes:               0,                                                   // 0 (to make sure node pools are created properly),
 			SNATEntry:                c.modelCluster.ACSK.SNATEntry,                       // true,
 			SSHFlags:                 c.modelCluster.ACSK.SSHFlags,                        // true,
-		})
+		},
+		c.modelCluster.ACSK.NodePools,
+	)
 
 	clusterSshSecret, err := c.getSshSecret(c)
 	if err != nil {
@@ -235,6 +237,7 @@ func (c *ACSKCluster) CreateCluster() error {
 	actions := []utils.Action{
 		action.NewUploadSSHKeyAction(c.log, creationContext, clusterSshSecret),
 		action.NewCreateACSKClusterAction(c.log, creationContext),
+		action.NewCreateACSKNodePoolAction(c.log, creationContext),
 	}
 
 	resp, err := utils.NewActionExecutor(c.log).ExecuteActions(actions, nil, true)
