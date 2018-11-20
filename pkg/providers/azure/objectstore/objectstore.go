@@ -53,6 +53,12 @@ type Credentials struct {
 	ClientSecret   string
 }
 
+// NewPlainObjectStore creates an objectstore with no configuration.
+// Instances created with this function may be used to access methods that don't explicitly access external (cloud) resources
+func NewPlainObjectStore() (*objectStore, error) {
+	return &objectStore{}, nil
+}
+
 // New returns an Object Store instance that manages Azure object store
 func New(config Config, credentials Credentials) (*objectStore, error) {
 	o := &objectStore{

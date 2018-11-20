@@ -275,14 +275,14 @@ func (os *ObjectStore) createFailed(b *ObjectStoreBucketModel, err error) error 
 	return os.db.Save(b).Error
 }
 
-func (os *ObjectStore) deleteFailed(b *ObjectStoreBucketModel, err error) error {
-	os.logger.WithError(err).Info("delete bucket failed")
+func (os *ObjectStore) deleteFailed(b *ObjectStoreBucketModel, reason error) error {
+	os.logger.WithError(reason).Info("delete bucket failed")
 	b.Status = providers.BucketDeleteError
-	b.StatusMsg = err.Error()
+	b.StatusMsg = reason.Error()
 	if err := os.db.Save(b).Error; err != nil {
 		return emperror.WrapWith(err, "failed to delete bucket", "bucket", b.Name)
 	}
-	return emperror.WrapWith(err, "bucket", b.Name)
+	return reason
 }
 
 // queryWithOrderByDb queries the database using the specified searchCriteria
